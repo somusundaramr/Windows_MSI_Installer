@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - windows_msi_installer
+    - roles/windows_msi_installer
