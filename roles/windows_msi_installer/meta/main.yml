@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Somasundaram R
-  description: MSI Windows Installer automation
+  description: Windows MSI Installer Automation
   company: -NA-
   license: GPL-2.0-or-later
   min_ansible_version: 2.9
