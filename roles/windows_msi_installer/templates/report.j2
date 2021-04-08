@@ -1,0 +1,33 @@
+
+                                    MSI DEPLOYMENT REPORT
+                                    ---------------------
+
+MSI File       : {{ MSI_File_Location }}
+Installed Group: {{ Inventory_group }}
+
+Start Time     : {{ lookup('pipe', 'date +%d-%m-%Y-%H:%M:%S') }}
+Completed on   : 
+
+Total Hosts    : {{ ansible_play_hosts_all | length }}               
+Unreachable    : {{ ansible_play_hosts_all | difference(ansible_play_batch) | length }}
+
+Installed
+
+------------------------------------------------------------------------------------------
+Server Name          IP Address      Reachable    Met min.req     Output       Reboot req.
+------------------------------------------------------------------------------------------
+
+{{ ansible_facts['hostname'] }}     {{ ansible_ip_addresses[0] }}        Yes      Yes, PS={{ ansible_powershell_version }}
+
+------------------------------------------------------------------------------------------
+Unreachable Hosts:
+---completed---
+
+Notes: 
+* Failed    : Not able to install MSI
+  Installed : MSI Installed through current task
+  Exists    : MSI already installed
+* -NA-  : -Not Applicable-
+*  PS   : PowerShell Version
+* Met min.req : yes - means server met minimum requirements 
+  >= PowerShell 3.0, .NET 4.0, WinRM Config

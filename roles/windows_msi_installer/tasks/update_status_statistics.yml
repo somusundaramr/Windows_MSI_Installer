@@ -1,0 +1,44 @@
+---
+# tasks file for winmsi project - Installation_Status
+#-----------------------------------------------------------------------------------
+- name: Updates as Exists if already installated
+#-----------------------------------------------------------------------------------
+  set_fact:
+    installation: "Exists"
+    restart_required: "-NA-"
+    Exist: "{{ Exist | int + 1 }}"
+  when: pre_installation.exists
+#-----------------------------------------------------------------------------------
+- name: Updates Failed status if failed in current play
+#-----------------------------------------------------------------------------------
+  set_fact:
+    installation: "Failed"
+    restart_required: "-NA-"
+    Failed: "{{ Failed | int + 1 }}"
+  when: not pre_installation.exists and not installation_status.changed
+#-----------------------------------------------------------------------------------
+- name: Updates Instalation status in report
+#-----------------------------------------------------------------------------------
+  lineinfile:
+    path: winmsi_report.txt
+    regex: "^({{ ansible_hostname }}.*)$"
+    line: '\1,      {{ installation }}          {{ restart_required }}'
+    backrefs: yes
+  delegate_to: localhost
+#------------------------------------------------------------------------------------
+- name: Updates Installation Statistics in report
+#------------------------------------------------------------------------------------
+  lineinfile:
+    path: winmsi_report.txt
+    regex: "^Installed"
+    line: "Installed  : {{ Installed }}      Exist : {{ Exist }}     Failed : {{ Failed }}"
+  delegate_to: localhost
+#------------------------------------------------------------------------------------
+- name: Updates completed time
+#------------------------------------------------------------------------------------
+  lineinfile:
+    path: winmsi_report.txt
+    regex: "^Completed on   :"
+    line: "Completed on   : {{ lookup('pipe', 'date +%d-%m-%Y-%H:%M:%S') }}"
+  delegate_to: localhost
+...

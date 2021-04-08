@@ -1,0 +1,26 @@
+---
+#-------------------------------------------------------------------
+# Main tasks file for Microsoft Windows Installer automation project
+#-------------------------------------------------------------------
+- name: Tasks for initial check and to continue or exit from play
+  include_tasks: roles/winmsi/tasks/initial_check_and_continue.yml
+#
+#-------------------------------------------------------------------
+- name: Creates report from template file
+#-------------------------------------------------------------------
+  template:
+    src: roles/winmsi/templates/report.j2
+    dest: winmsi_report.txt
+  run_once: yes
+  delegate_to: localhost
+#
+#-------------------------------------------------------------------
+- name: Verify MSI already installed and Install MSI Package if not
+#-------------------------------------------------------------------
+  include_tasks: roles/winmsi/tasks/verify_and_install.yml
+#
+#-------------------------------------------------------------------
+- name: Update status and statistics of installation on report
+#-------------------------------------------------------------------
+  include_tasks: roles/winmsi/tasks/update_status_statistics.yml
+...

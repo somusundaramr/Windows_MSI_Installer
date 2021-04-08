@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Somasundaram R
+  description: MSI Windows Installer automation
+  company: -NA-
+  license: GPL-2.0-or-later
+  min_ansible_version: 2.9
+  role_name: msi_windows_installer
+  platforms:
+   - name: EL
+     versions:
+     - 8
+  galaxy_tags:
+    - windows
+    - msi
+    - installer
+  dependencies: []
+...

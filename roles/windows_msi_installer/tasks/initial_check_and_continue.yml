@@ -1,0 +1,22 @@
+---
+# tasks file for winmsi project
+#-------------------------------------------------------------------------
+- name: Check MSI file exist in network share
+#-------------------------------------------------------------------------
+  stat:
+    path: "{{ MSI_File_Location }}"
+  run_once: yes
+  register: stat_file
+  delegate_to: localhost
+#-------------------------------------------------------------------------
+- name: Update in log and end play if MSI file not found or not accessible
+#-------------------------------------------------------------------------
+  block:
+    - name: Update in log file and end play if MSI file not found
+      lineinfile:
+        path: logs/winmsi_logfile
+        line: "MSI file not found in specified location"
+      delegate_to: localhost
+    - meta: end_play
+  when: not stat_file.stat.exists
+...

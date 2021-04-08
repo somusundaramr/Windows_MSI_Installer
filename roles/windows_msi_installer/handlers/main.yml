@@ -1,0 +1,10 @@
+---
+# handlers file for winmsi
+#-----------------------------------------------------------------------------------
+- name: update install status
+#-----------------------------------------------------------------------------------
+  set_fact:
+    installation: "Installed"
+    restart_required: "{{ installation_status.reboot_required }}"
+    Installed: "{{ Installed | int + 1 }}"
+  when: not pre_installation.exists

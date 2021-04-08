@@ -1,0 +1,6 @@
+---
+MSI_File_Location:                 # Example:  /tmp/7z1900-x64.msi
+Inventory_group:                   # Example: win_servers
+MSIEXEC_arguments: 
+Product_Code:                      # Example: "{23170F69-40C1-2702-1900-000001000000}"
+...

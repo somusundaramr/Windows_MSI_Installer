@@ -1,0 +1,40 @@
+---
+#----------------------------------------------------------------------
+- name: Check MSI already Installed in Windows Registry
+#----------------------------------------------------------------------
+  win_reg_stat:
+    path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{{ Product_Code }}
+  register: pre_installation
+#----------------------------------------------------------------------
+- name: Copy MSI file to remote host tmp location and install
+#----------------------------------------------------------------------
+  block:
+    - name: Copy MSI file from network share to host
+      win_copy:
+        src: "{{ MSI_File_Location }}"
+        dest: C:\temp\{{ MSI_File_Location | basename }}
+      register: msicopy_status
+
+    - name: Install MSI Package
+      win_package:
+        path: C:\temp\{{ MSI_File_Location | basename }}
+        arguments: "{{ MSIEXEC_arguments }}"
+        wait: yes
+        state: present
+      register: installation_status
+      when: not msicopy_status.failed
+      notify:
+        - update install status
+    - name: flush handlers
+      meta: flush_handlers
+  when: stat_file.stat.exists and ansible_powershell_version >= 3 and not pre_installation.exists
+  become: yes
+  become_user: ansible
+  become_method: runas
+#-----------------------------------------------------------------------
+- name: Check MSI installed properly in windows registry again
+#-----------------------------------------------------------------------
+  win_reg_stat:
+    path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{{ Product_Code }}
+  register: post_installation
+...
